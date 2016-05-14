@@ -1,0 +1,9 @@
+
+html, body {
+    min-height: 100%;
+}
+
+
+body {
+    background-image: url("../img/honeycomb2.png"), linear-gradient(to bottom, #191E43, #08081F);
+}
