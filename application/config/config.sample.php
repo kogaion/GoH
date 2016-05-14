@@ -512,4 +512,5 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-define('PROXY', 'http://proxy.avangate.local:8080');
+defined('NEWSLETTER_EMAIL_FROM') or define('NEWSLETTER_EMAIL_FROM', '');
+defined('NEWSLETTER_EMAIL_TO') or define('NEWSLETTER_EMAIL_TO', '');
