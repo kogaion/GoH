@@ -24,8 +24,6 @@ class Top extends CI_Controller
             $tmp['progress_relative'] = ($result['points'] >= 0) ? "up" : "down";
 
             $this->data['best'][] = $tmp;
-            $this->data['best'][] = $tmp;
-            $this->data['best'][] = $tmp;
         }
 //
 //

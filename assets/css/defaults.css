@@ -1,6 +1,7 @@
 
 html, body {
     min-height: 100%;
+    height: 100%
 }
 
 table td.right, table th.right {
@@ -14,4 +15,11 @@ table td.center, table th.center {
 
 table td.right, table th.right {
     text-align: right;
+}
+
+
+.vcenter {
+    display: inline-block;
+    float: none;
+    vertical-align: middle;
 }
