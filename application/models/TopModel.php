@@ -50,4 +50,33 @@ class TopModel extends CI_Model
                 ->get()
                 ->result_array();
     }
+
+    public function getProjectsGraph($idProject, $startDate, $endDate)
+    {
+        $projectData =
+            $this->db
+                ->select("
+                sum(ivvll_user_history.EvalXpPoints) as points,
+                ivvll_project.*,
+                concat(DATE(ivvll_user_history.EvalTime), ' ', HOUR(ivvll_user_history.EvalTime)) AS dtime
+            ")
+                ->from('ivvll_user_history')
+                ->join('ivvll_commit', 'ivvll_user_history.CommitId = ivvll_commit.IdCommit')
+                ->join('ivvll_project', 'ivvll_project.IdProject = ivvll_commit.IdProject')
+                ->where('EvalTime >=', $startDate)
+                ->where('EvalTime <', $endDate)
+                ->where('ivvll_project.IdProject', $idProject)
+                ->group_by(['ivvll_project.IdProject', "concat(DATE(ivvll_user_history.EvalTime), ' ', HOUR(ivvll_user_history.EvalTime)) "])
+                ->order_by('dtime', 'ASC')
+                ->get()
+                ->result_array();
+
+        $totalPoints = 0;
+        foreach ($projectData as &$projectItem) {
+            $totalPoints += $projectItem['points'];
+            $projectItem['totalPoints'] = $totalPoints;
+        }
+
+        return $projectData;
+    }
 }
