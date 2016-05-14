@@ -23,8 +23,8 @@ class Top extends CI_Controller
 
     public function test()
     {
-        $this->load->model('commit');
-        var_dump($this->commit->insert(1,1));
+        $this->load->model('topmodel');
+        var_dump($this->topmodel->getTop('2016-05-14 12:30:12', '2016-05-14 12:31:15', 3));
     }
-    
+
 }
