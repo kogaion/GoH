@@ -29,26 +29,32 @@ class TopModel extends CI_Model
 
     public function getTopProjects($startDate, $endDate, $projectCount = null, $order = 'DESC')
     {
+        $limit = '';
         if (!is_null($projectCount)) {
-            $this->db->limit($projectCount);
+            
+            $limit = "
+                limit {$projectCount}
+            ";
         }
-
-        return
-            $this->db
-                ->select("
-                sum(ivvll_user_history.EvalXpPoints) as points,
-                ivvll_project.*,
-            ")
-                ->from('ivvll_user_history')
-                ->join('ivvll_commit', 'ivvll_user_history.CommitId = ivvll_commit.IdCommit')
-                ->join('ivvll_project', 'ivvll_project.IdProject = ivvll_commit.IdProject')
-                ->where('EvalTime >=', $startDate)
-                ->where('EvalTime <', $endDate)
-                ->group_by('ivvll_project.IdProject')
-                ->limit($projectCount)
-                ->order_by('points', $order)
-                ->get()
-                ->result_array();
+        
+        return $this->db->query("
+            select 
+                ifnull(sum(ivvll_user_history.EvalXpPoints), 0) as points,
+                ivvll_project.*
+            from ivvll_project
+            left join ivvll_commit on ivvll_project.IdProject = ivvll_commit.IdProject
+            left join ivvll_user_history on ivvll_user_history.CommitId = ivvll_commit.IdCommit 
+                and EvalTime >= {$this->db->escape($startDate)}
+                and EvalTime < {$this->db->escape($endDate)}
+            
+            group by ivvll_project.IdProject
+            
+            order by points {$order}
+            
+            {$limit}
+        ")->result_array();
+        
+        
     }
 
     public function getProjectsGraph($idProject, $startDate, $endDate)
@@ -60,9 +66,10 @@ class TopModel extends CI_Model
                 ivvll_project.*,
                 concat(DATE(ivvll_user_history.EvalTime), ' ', HOUR(ivvll_user_history.EvalTime)) AS dtime
             ")
-                ->from('ivvll_user_history')
-                ->join('ivvll_commit', 'ivvll_user_history.CommitId = ivvll_commit.IdCommit')
-                ->join('ivvll_project', 'ivvll_project.IdProject = ivvll_commit.IdProject')
+                ->from('ivvll_project')
+                ->join('ivvll_commit', 'ivvll_project.IdProject = ivvll_commit.IdProject')
+                ->join('ivvll_user_history',  'ivvll_user_history.CommitId = ivvll_commit.IdCommit')
+                
                 ->where('EvalTime >=', $startDate)
                 ->where('EvalTime <', $endDate)
                 ->where('ivvll_project.IdProject', $idProject)

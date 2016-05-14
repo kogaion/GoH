@@ -98,4 +98,4 @@ defined('BUILD_FAILED') or define('BUILD_FAILED', -1);
 defined('BUILD_SUCCESFUL') or define('BUILD_SUCCESFUL', 1);
 
 defined('IMAGES_PATH') or define('IMAGES_PATH', './assets/image/top-images/');
-defined('WKHTMLTOIMAGE_FILENAME') || define('WKHTMLTOIMAGE_FILENAME', '/usr/local/bin/wkhtmltoimage');
+defined('WKHTMLTOIMAGE_FILENAME') || define('WKHTMLTOIMAGE_FILENAME', 'wkhtmltoimage');

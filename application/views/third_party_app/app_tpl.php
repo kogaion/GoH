@@ -22,8 +22,8 @@
                     <a class="<?php echo $projectIndex == 0 ? "" : "collapsed"; ?>" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $projectIndex;?>"
                        aria-expanded="<?php echo $projectIndex == 0 ? "true" : "false"; ?>" aria-controls="collapse<?php echo $projectIndex;?>">
                         <?php echo ucfirst($project['Name']); ?>
-                        <span class="label label-<?php echo $project['points'] > 0 ? 'success' : 'info'; ?>" style="float:right; margin:0px 8px">project points  <?php echo $project['points']; ?> <span class="glyphicon glyphicon-star" aria-hidden="true"></span></span>
-                        <span class="label label-<?php echo $project['contrib'] > 0 ? 'danger' : 'danger'; ?>" style="float:right"> contributors  <?php echo $project['contrib']; ?> <span aria-hidden="true" class="glyphicon glyphicon-user"></span></span>
+                        <span class="label label-<?php echo   $project['points'] > 300 ? '' : ($project['points'] > 150 ? 'warning' : 'danger'); ?>" style="float:right; margin:0px 8px">project points  <?php echo $project['points']; ?> <span class="glyphicon glyphicon-star" aria-hidden="true"></span></span>
+                        <span class="label label-<?php echo $project['contrib'] > 2 ? 'success' : 'info'; ?>" style="float:right"> contributors  <?php echo $project['contrib']; ?> <span aria-hidden="true" class="glyphicon glyphicon-user"></span></span>
 
 
 
