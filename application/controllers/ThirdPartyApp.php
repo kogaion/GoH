@@ -5,7 +5,8 @@ class ThirdPartyApp extends CI_Controller
 {
     public function index()
     {
-        $this->load->view('third_party_app/app_tpl');
+        $projectGraphData = $this->TopModel->getProjectsWithPoints();
+        $this->load->view('third_party_app/app_tpl', ['projects' => $projectGraphData]);
     }
     
     public function projectQuality()
