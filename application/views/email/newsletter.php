@@ -18,7 +18,7 @@
 
         #table {
             width: 800px;
-            margin: 10px 0;
+            margin: 20px 0 50px;
         }
 
         #table th,
@@ -37,7 +37,7 @@
 
 
     </style>
-<?php print_r($projectsEvolution); ?>
+
     <table id="table_content">
         <tr>
             <td align="center">
@@ -46,6 +46,10 @@
                 <table id="table">
                     <tr>
                         <td>
+
+                            <p style="margin: 4px">
+                                Daca acest email nu se afiseaza corect va rugam sa-l vizualizati in fereastra de browser accesand <a style="color: #fff; text-decoration: underline" href="<?=$base_url?>">acest link</a>
+                            </p>
 
                             <h1 style="margin: 10px 10px">Weekly GoC Progress</h1>
 
@@ -103,4 +107,3 @@
 </html>
 <?php
 
-dp($allTime);

@@ -19,6 +19,7 @@ class EmailNewsletter extends CI_Controller
         $this->email->message($html);
 
         $this->email->send();
+
     }
 
     protected function generateHtml()
@@ -48,7 +49,10 @@ class EmailNewsletter extends CI_Controller
             'allTime'           => $generalLeaderBoard,
             'userEvolution'     => $last7DaysUserEvolution,
             'projectsEvolution' => $last7DaysProjectEvolution,
+            'base_url'          => base_url('EmailNewsletter'),
+
         ];
+
         return $this->load->view('email/newsletter', $data, true);
     }
 
