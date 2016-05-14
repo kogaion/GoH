@@ -21,6 +21,7 @@ class ThirdPartyApp extends CI_Controller
         
         
         $projects = $this->TopModel->getTopProjects($startDT, $endDT);
+        
         foreach ($projects as $proj) {
           
             $name = $proj['Name'];
