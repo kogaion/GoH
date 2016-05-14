@@ -43,7 +43,7 @@
         <tr>
             <td align="center">
 
-
+                <br><br>
                 <table id="table">
                     <tr>
                         <td>
@@ -99,11 +99,14 @@
                     </tr>
 
                 </table>
+                <br><br><br>
             </td>
         </tr>
 
 
     </table>
+
+
 </body>
 </html>
 <?php

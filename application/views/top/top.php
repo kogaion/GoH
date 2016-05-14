@@ -40,7 +40,7 @@
                     <td><?= image_asset($person['rank_image'], "", ['height' => '39px']) ?> <?= $person['rank'] ?></td>
                     <?php /* <td><?= $person['score'] ?></td> */ ?>
                     <td><span
-                            class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>"></span> <?= $person['progress'] ?>
+                            class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>"></span> <?= $person['progress'] ?> xp
                     </td>
                 </tr>
 
@@ -53,7 +53,7 @@
                         <td><?= image_asset($person['rank_image'], "", ['height' => '39px']) ?> <?= $person['rank'] ?></td>
                         <?php /* <td><?= $person['score'] ?></td> */ ?>
                         <td><span
-                                class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>" style="color:red !important; "></span> <?= $person['progress'] ?>
+                                class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>" style="color:red !important; "></span> <?= $person['progress'] ?> xp
                         </td>
                     </tr>
                 <?php } else {
