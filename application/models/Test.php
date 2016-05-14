@@ -18,5 +18,7 @@ class Test extends CI_Model
         }
 
         echo 'Total Results: ' . $query->num_rows();
+        
+        dp($query);
     }
 }
