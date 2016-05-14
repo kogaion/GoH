@@ -9,7 +9,8 @@ class TopModel extends CI_Model
                 ->select("
                 sum(ivvll_user_history.EvalXpPoints) as points,
                 ivvll_user.*,
-                ivvll_ranking.Name as Rank
+                ivvll_ranking.Name as Rank,
+                ivvll_user.IdRank
             ")
                 ->from('ivvll_user_history')
                 ->join('ivvll_user', 'ivvll_user_history.IdUser = ivvll_user.IdUser')
