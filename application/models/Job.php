@@ -19,11 +19,14 @@ class Job extends CI_Model
         return '0000-00-00 00:00:00';
     }
     
-    public function add($jobContents, $projectId)
+    public function add($jobContents, $projectId, $buildUrl)
     {
         $this->db->query("
             insert into {$this->table}
-            set Contents = {$this->db->escape($jobContents)}, IdProject = {$projectId}
+            set
+              Contents = {$this->db->escape($jobContents)},
+              IdProject = {$projectId},
+              JobUrl = '{$buildUrl}'
         ");
     }
     

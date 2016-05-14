@@ -16,6 +16,7 @@ class JenkinsBuildProcessor extends CI_Controller
 
     public function process()
     {
+        error_reporting(E_ALL);
         $projects = $this->projectModel->getAll();
 
         foreach ($projects as $project) {
@@ -51,8 +52,14 @@ class JenkinsBuildProcessor extends CI_Controller
     private function parseBuilds($buildsToBeAdded, $project)
     {
         foreach ($buildsToBeAdded as $build) {
-            $buildDetails = $this->jenkinsConnector->getBuildDetails($build, $project['JenkinsId']);
-            $this->jobModel->add($buildDetails, $project['IdProject']);
+            $buildDetails        = $this->jenkinsConnector->getBuildDetails($build, $project['JenkinsId']);
+            $buildUrl = $this->jenkinsConnector->buildJobUrl($build, $project['JenkinsId']);
+            $buildDetailsDecoded = json_decode($buildDetails, true);
+            if (empty($buildDetailsDecoded['changeSet']['items'])) {
+                continue;
+            }
+
+            $this->jobModel->add($buildDetails, $project['IdProject'], $buildUrl);
         }
     }
 }

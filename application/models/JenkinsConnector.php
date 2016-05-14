@@ -22,7 +22,6 @@ class JenkinsConnector
             CURLOPT_URL            => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => false,
-            CURLOPT_PORT           => 8080,
         ];
         $fields                      = ['token' => $this->jenkinsToken];
         $options[CURLOPT_POST]       = true;
@@ -52,7 +51,7 @@ class JenkinsConnector
         return $this->send($jobUrl);
     }
 
-    private function buildJobUrl($buildId, $IdProject)
+    public function buildJobUrl($buildId, $IdProject)
     {
         return sprintf('%s/job/%s/%d/api/json', $this->jenkinsBaseUrl, $IdProject, $buildId);
     }
