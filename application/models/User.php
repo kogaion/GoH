@@ -2,11 +2,11 @@
 
 class User extends CI_Model
 {
-    public function insert($email, $name, $firstName, $lastName)
+    public function insert($email, $name)
     {
         return
             $this->db->insert('ivvll_user',
-                ['Email' => $email, 'Name' => $name, 'FirstName' => $firstName, 'LastName' => $lastName]);
+                ['Email' => $email, 'Name' => $name]);
     }
 
     public function getUser($idUser)
