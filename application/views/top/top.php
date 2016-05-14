@@ -22,39 +22,35 @@
                 <th class="">Avatar</th>
                 <th class="">Name</th>
                 <th>Rank</th>
-                <th>Experience</th>
+                <?php /* <th>Experience</th> */ ?>
                 <th>Progress</th>
             </tr>
 
             <?php foreach ($best as $key => $person) { ?>
+                <?php if ( $key < 3 || $key > (count($best) - 4) ) { ?>
                 <tr>
                     <td class="right"><?= $key + 1 ?></td>
                     <td><?= image_asset('gravatars/' . $person['image'], "", array('width' => '100px')) ?></td>
                     <td><span class="name"><?= $person['name'] ?></span></td>
                     <td><?= image_asset($person['rank_image'], "", ['height' => '39px']) ?> <?= $person['rank'] ?></td>
-                    <td><?= $person['score'] ?></td>
+                    <?php /* <td><?= $person['score'] ?></td> */ ?>
                     <td><span class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>"></span> <?= $person['progress'] ?></td>
                 </tr>
+
+                <?php } else if ( count($best) > 3 && $key == 3 ) { ?>
+                    <tr>
+                        <td class="separator center" colspan="<?= count($best) + 3 ?>">
+                            <span class="glyphicon glyphicon-certificate"></span>
+                            <span class="glyphicon glyphicon-certificate"></span>
+                            <span class="glyphicon glyphicon-certificate"></span>
+                        </td>
+                    </tr>
+                <?php } else if (0) { ?>
+
+                <?php } ?>
             <?php } ?>
 
-            <tr>
-                <td class="separator center" colspan="<?= count($best) + 3 ?>">
-                    <span class="glyphicon glyphicon-certificate"></span>
-                    <span class="glyphicon glyphicon-certificate"></span>
-                    <span class="glyphicon glyphicon-certificate"></span>
-                </td>
-            </tr>
 
-            <?php foreach ($worst as $key => $person) { ?>
-                <tr>
-                    <td class="right"><?= $key + 1 ?></td>
-                    <td><?= image_asset('gravatars/' . $person['image'], "", array('width' => '100px')) ?></td>
-                    <td><span class="name"><?= $person['name'] ?></span></td>
-                    <td><?= image_asset($person['rank_image'], "", ['height' => '39px']) ?> <?= $person['rank'] ?></td>
-                    <td><?= $person['score'] ?></td>
-                    <td><span class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>"></span> <?= $person['progress'] ?></td>
-                </tr>
-            <?php } ?>
 
         </table>
 
