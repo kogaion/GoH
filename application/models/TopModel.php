@@ -66,7 +66,10 @@ class TopModel extends CI_Model
                 ->where('EvalTime >=', $startDate)
                 ->where('EvalTime <', $endDate)
                 ->where('ivvll_project.IdProject', $idProject)
-                ->group_by(['ivvll_project.IdProject', "concat(DATE(ivvll_user_history.EvalTime), ' ', HOUR(ivvll_user_history.EvalTime)) "])
+                ->group_by([
+                    'ivvll_project.IdProject',
+                    "concat(DATE(ivvll_user_history.EvalTime), ' ', HOUR(ivvll_user_history.EvalTime)) "
+                ])
                 ->order_by('dtime', 'ASC')
                 ->get()
                 ->result_array();
@@ -78,5 +81,38 @@ class TopModel extends CI_Model
         }
 
         return $projectData;
+    }
+
+
+    public function getProjectsWithPoints()
+    {
+//        return
+//            $this->db
+//                ->select("
+//                sum(ivvll_user_history.EvalXpPoints) as points,
+//                ivvll_project.*,
+//            ")
+//                ->from('ivvll_user_history')
+//                ->join('ivvll_commit', 'ivvll_user_history.CommitId = ivvll_commit.IdCommit')
+//                ->join('ivvll_project', 'ivvll_project.IdProject = ivvll_commit.IdProject')
+//                ->group_by('ivvll_project.IdProject')
+//                ->order_by('points', 'DESC')
+//                ->get()
+//                ->result_array();
+//
+        return
+            $this->db
+                ->select("
+                sum(coalesce(ivvll_user_history.EvalXpPoints, 0)) as points,
+                ivvll_project.*,
+                count(distinct(ivvll_user_history.IdUser)) as contrib
+            ")
+                ->from('ivvll_project')
+                ->join('ivvll_commit', 'ivvll_project.IdProject = ivvll_commit.IdProject', 'left')
+                ->join('ivvll_user_history', 'ivvll_user_history.CommitId = ivvll_commit.IdCommit', 'left')
+                ->group_by('ivvll_project.IdProject')
+                ->order_by('points', 'DESC')
+                ->get()
+                ->result_array();
     }
 }
