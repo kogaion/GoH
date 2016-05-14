@@ -38,7 +38,7 @@ class Job extends CI_Model
             select *
             from {$this->table}
             where ProcessDate = 0
-                and CreateDate >= {$this->db->escape($lastProcessDate)}
+                #and CreateDate >= {$this->db->escape($lastProcessDate)}
             order by CreateDate
             limit 10
         ");
@@ -51,5 +51,19 @@ class Job extends CI_Model
         }
         
         return $result;
+    }
+    
+    public function process($job)
+    {
+        $this->db->query("
+            update {$this->table}
+            set ProcessDate = NOW()
+            where IdJob = {$job->IdJob}
+        ");
+    }
+    
+    public function getById($idJob)
+    {
+        return $this->db->query("select * from {$this->table} where IdJob = {$this->db->escape($idJob)}")->row();
     }
 }

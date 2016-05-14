@@ -5,9 +5,6 @@ class Jenkins extends CI_Controller
     protected $url = 'http://ionutcod.avangate.local:8080';
     protected $apiToken = 'a8784a5d2cd6ac31c8c18de155b3b12c';
     
-    protected $project = 'hacktiny';
-    protected $jobNr = 2;
-    
     protected $projects = [
         'hackaton'  => [
             'url'       => '/job/hackdemo',
@@ -21,12 +18,16 @@ class Jenkins extends CI_Controller
     
     public function parseUnprocessedJobs()
     {   
-        $lastProcessedJobs = $this->Job->getUnprocessed();
+        $lastJobs = $this->Job->getUnprocessed();
         
-        foreach ($lastProcessedJobs as $job) {
+        foreach ($lastJobs as $job) {
             
             $contents = json_decode($job->Contents, true);
             if (empty($contents)) {
+                continue;
+            }
+            
+            if (empty($contents['changeSet']['items'])) {
                 continue;
             }
             
@@ -57,61 +58,142 @@ class Jenkins extends CI_Controller
             $jobCommit->CreateDate = $commitDate;
             $jobCommit->Artifacts = $artifacts;
             $jobCommit->CommitId = $commitId;
+            $jobCommit->IdJob = $job->IdJob;
+            
+            //dp($jobCommit);
+            
             $this->JobCommit->add($jobCommit);
+            $this->Job->process($job);
+            
+            dp("processed {$job->IdJob}");
+        }
+    }
+    
+    public function parseUnprocessedCommits()
+    {
+        $lastCommits = $this->JobCommit->getUnprocessed();
+        
+        foreach ($lastCommits as $jobCommit) {
+            
+            $artifacts = json_decode($jobCommit->Artifacts);
+            
+            $buildScore = BUILD_FAILED; // build failed
+            $crapScore = 0;
+            $unitScore = 0;
+            
+            if (!empty($artifacts)) {
+                $buildScore = BUILD_SUCCESFUL; // build failed
+                
+                $score = $this->parseArtifacts($jobCommit);
+                $crapScore = $score['crap'];
+                $unitScore = $score['unit'];
+            }
+            
+            $commit = new stdClass();
+            $commit->IdUser = $jobCommit->IdUser;
+            $commit->IdProject = $jobCommit->IdProject;
+            $commit->Build = $buildScore;
+            $commit->Crap = $crapScore;
+            $commit->Unit = $unitScore;
+            
+            $idCommit = $this->Commit->add($commit);
+            
+            $jobCommit->IdCommit = 0;$idCommit;
+            $this->JobCommit->process($jobCommit);
+            
+            dp("processed {$jobCommit->CommitId}");
+        }
+    }
+    
+    protected function parseArtifacts($jobCommit)
+    {
+        $result = [
+            'crap' => 0,
+            'unit'  => 0,
+        ];
+        
+        $artifacts = $jobCommit->Artifacts;
+        
+        if (empty($artifacts)) {
+            return $result;
         }
         
-         
+        $idJob = $jobCommit->IdJob;
+        $job = $this->Job->getById($idJob);
+        
+        if (empty($job->JobUrl)) {
+            return $result;
+        }
+        
+        $artifacts = json_decode($artifacts);
+        foreach ($artifacts as $artifactDetails) {
+            
+            if (!in_array($artifactDetails->fileName, ['build-coverege.xml', 'crap.xml'])) {
+                return $result;
+            }
+            
+            $relativePath = $artifactDetails->relativePath;
+            $url = $this->getArtifactUrl($relativePath, $job);
+            
+            $contents = $this->call($url, [], 'GET');
+            if (empty($contents)) {
+                continue;
+            }
+            
+            if ($artifactDetails->fileName == 'build-coverege.xml') {
+                $result['unit'] = $this->parseCodeCoverage($contents);
+            }
+            
+            if ($artifactDetails->fileName == 'crap.xml') {
+                $result['crap'] = $this->parseCrap($contents);
+            }
+        }
+        
+        return $result;
     }
     
-    public function job()
+    protected function parseCodeCoverage($contents)
     {
-        $this->project = 'hackaton';
-        $this->jobNr = 6;
+        $xml = simplexml_load_string($contents);
+        $attrs = $xml->project->metrics->attributes();
         
-        $url = "/{$this->jobNr}/api/json";
-        $response = $this->call($url);
+        $keys = [
+            'methods', 'coveredmethods', 
+            'conditionals', 'coveredconditionals', 
+            'statements', 'coveredstatements', 
+            'elements', 'coveredelements'
+        ];
+        $coverage = array_fill_keys($keys, 0);
         
-        $this->Job->add($response);
+        foreach ($attrs as $name => $val) {
+            if (in_array($name, $keys)) {
+                $coverage[$name] = (string) $val; 
+            }
+        }
         
-        echo $response;
-        exit;
+        return round(100 * (0
+            + 0.25 * ($coverage['coveredmethods'] / (empty($coverage['methods']) ? 1 : $coverage['methods']))
+            + 0.25 * ($coverage['coveredconditionals'] / (empty($coverage['conditionals']) ? 1 : $coverage['conditionals']))
+            + 0.25 * ($coverage['coveredstatements'] / (empty($coverage['statements']) ? 1 : $coverage['statements']))
+            + 0.25 * ($coverage['coveredelements'] / (empty($coverage['elements']) ? 1 : $coverage['elements']))
+        ));
     }
     
-    public function artifacts()
+    protected function parseCrap($contents)
     {
-        $job = $this->job(2);
-        $jobContents = json_decode($job, true);
-        
-        dp($jobContents);
-        exit;
-        
-        $userName = $jobContents['actions'][0]['causes'][0]['userId'];
-        $commitId = $jobContents['actions'];
-        
-        
-        $changeSet = $jobContents['changeSet'][0];
-        $artifacts = $jobContents['artifacts'];
-        
-        $user = $jobContents[''];
-        
-        dp($jobContents);
-        
-        
-        //$this->getJobArtifacts('hackaton', );
+        $xml = simplexml_load_string($contents);
+        return (float) $xml->stats->crapMethodPercent * 100;
     }
     
-    protected function getJobArtifacts($projectName, $jobContents)
+    protected function getArtifactUrl($relativePath, $job)
     {
-        $url = $this->projects[$projectName] . '/' . $jobNumber . '/api/json';
-        $obj = $this->call($url);
-        
-        dp($obj);
+        return "{$job->JobUrl}/artifact/{$relativePath}";
     }
     
     protected function call($url, $params = [], $method = 'POST')
     {
         $options = [
-            CURLOPT_URL             => $this->url . $this->projects[$this->project]['url'] . $url,
+            CURLOPT_URL             => $url,
             //CURLOPT_POSTFIELDS    => $params,
             CURLOPT_RETURNTRANSFER  => true,
             CURLOPT_FOLLOWLOCATION  => false,

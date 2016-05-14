@@ -16,7 +16,11 @@ class Points
 
         foreach ($this->algo as $metric => $metricCalc) {
             if (array_key_exists($metric, $inputData)) {
-                $points += $inputData[$metric] * $metricCalc['weight'] * $metricCalc['points'];
+                $points += $metricCalc['weight'] * $metricCalc['points'] * (
+                    ($metricCalc['report'] == 'inverse') 
+                        ? round((empty($inputData[$metric]) ? 0 : 100 / $inputData[$metric])) 
+                        : $inputData[$metric]
+                );
             }
         }
 
