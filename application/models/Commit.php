@@ -32,4 +32,21 @@ class Commit extends CI_Model
         return
             $this->db->from('ivvll_commit')->get()->result_array();
     }
+
+    public function getCommitsForProcessing()
+    {
+        $this->db->where('Processed', 0);
+
+        return
+            $this->db->from('ivvll_commit')->get()->result_array();
+    }
+
+    public function markAsProcessed(array $processedCommitsId)
+    {
+        return
+            $this->db
+                ->where_in('IdCommit', $processedCommitsId)
+                ->set('Processed', 1)
+                ->update('ivvll_commit');
+    }
 }

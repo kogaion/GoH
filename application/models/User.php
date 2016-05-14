@@ -1,6 +1,6 @@
 <?php
 
-class User
+class User extends CI_Model
 {
     public function insert($email, $name, $firstName, $lastName)
     {
@@ -18,5 +18,25 @@ class User
     {
         return
             $this->db->from('ivvll_user')->get()->result_array();
+    }
+
+    public function addPoints($idUser, $points = 0)
+    {
+        $this->db
+            ->where('IdUser', $idUser)
+            ->set('XpPoints', 'XpPoints + ' . $points, false);
+
+        return
+            $this->db->update('ivvll_user');
+    }
+
+    public function setRank($idUser, $idRank)
+    {
+        $this->db
+            ->where('IdUser', $idUser)
+            ->set('IdRank', $idRank);
+
+        return
+            $this->db->update('ivvll_user');
     }
 }
