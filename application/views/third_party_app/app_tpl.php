@@ -36,7 +36,7 @@
                         <?php echo $project['Description']; ?>
                     </p>
 
-                    <img src="<?php echo IMAGES_PATH . '/graph_' . $project['IdProject'] . '.jpg';?>" />
+                    <img src="<?php echo image_asset_url('top-images/graph_' . $project['IdProject'] . '.jpg') ;?>" />
                 </div>
             </div>
         </div>
