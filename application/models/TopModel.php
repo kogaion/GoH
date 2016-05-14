@@ -2,8 +2,12 @@
 
 class TopModel extends CI_Model
 {
-    public function getTopUsers($startDate, $endDate, $userCount, $order = 'DESC')
+    public function getTopUsers($startDate, $endDate, $userCount = null, $order = 'DESC')
     {
+        if (!is_null($userCount)) {
+            $this->db->limit($userCount);
+        }
+
         return
             $this->db
                 ->select("
@@ -18,14 +22,17 @@ class TopModel extends CI_Model
                 ->where('EvalTime >=', $startDate)
                 ->where('EvalTime <', $endDate)
                 ->group_by('ivvll_user.IdUser')
-                ->limit($userCount)
                 ->order_by('points', $order)
                 ->get()
                 ->result_array();
     }
 
-    public function getTopProjects($startDate, $endDate, $projectCount, $order = 'DESC')
+    public function getTopProjects($startDate, $endDate, $projectCount = null, $order = 'DESC')
     {
+        if (!is_null($projectCount)) {
+            $this->db->limit($projectCount);
+        }
+
         return
             $this->db
                 ->select("
