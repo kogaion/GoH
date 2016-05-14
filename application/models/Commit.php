@@ -2,6 +2,17 @@
 
 class Commit extends CI_Model
 {
+    protected $table = 'ivvll_commit';
+    
+    public function add($commit)
+    {
+        return 0;
+        return $this->db->insert(
+            $this->table,
+            $commit
+        );
+    }
+    
     public function insert($idUser, $idProject, $createDate)
     {
         return

@@ -90,3 +90,6 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 defined('XML_PATH') or define('XML_PATH', './application/xml');
+
+defined('BUILD_FAILED') or define('BUILD_FAILED', -1);
+defined('BUILD_SUCCESFUL') or define('BUILD_SUCCESFUL', 1);

@@ -5,9 +5,6 @@ class Jenkins extends CI_Controller
     protected $url = 'http://ionutcod.avangate.local:8080';
     protected $apiToken = 'a8784a5d2cd6ac31c8c18de155b3b12c';
     
-    protected $project = 'hacktiny';
-    protected $jobNr = 2;
-    
     protected $projects = [
         'hackaton'  => [
             'url'       => '/job/hackdemo',
@@ -21,9 +18,9 @@ class Jenkins extends CI_Controller
     
     public function parseUnprocessedJobs()
     {   
-        $lastProcessedJobs = $this->Job->getUnprocessed();
+        $lastJobs = $this->Job->getUnprocessed();
         
-        foreach ($lastProcessedJobs as $job) {
+        foreach ($lastJobs as $job) {
             
             $contents = json_decode($job->Contents, true);
             if (empty($contents)) {
@@ -57,55 +54,98 @@ class Jenkins extends CI_Controller
             $jobCommit->CreateDate = $commitDate;
             $jobCommit->Artifacts = $artifacts;
             $jobCommit->CommitId = $commitId;
+            $jobCommit->IdJob = $job->IdJob;
+            
             $this->JobCommit->add($jobCommit);
+            
+            $this->Job->process($job);
+            
+            dp("processed {$job->IdJob}");
+        }
+    }
+    
+    public function parseUnprocessedCommits()
+    {
+        $lastCommits = $this->JobCommit->getUnprocessed();
+        
+        foreach ($lastCommits as $jobCommit) {
+            
+            $artifacts = json_decode($jobCommit->Artifacts);
+            
+            $buildScore = BUILD_FAILED; // build failed
+            $crapScore = 0;
+            $unitScore = 0;
+            
+            if (!empty($artifacts)) {
+                $buildScore = BUILD_SUCCESFUL; // build failed
+                
+                $score = $this->parseArtifacts($jobCommit);
+                $crapScore = $score['crap'];
+                $unitScore = $score['unit'];
+            }
+            
+            $commit = new stdClass();
+            $commit->IdUser = $jobCommit->IdUser;
+            $commit->IdProject = $jobCommit->IdProject;
+            $commit->Build = $buildScore;
+            $commit->Crap = $crapScore;
+            $commit->Unit = $unitScore;
+            
+            $idCommit = $this->Commit->add($commit);
+            
+            $jobCommit->IdCommit = $idCommit;
+            $this->JobCommit->process($jobCommit);
+            
+            dp("processed {$jobCommit->CommitId}");
+        }
+    }
+    
+    protected function parseArtifacts($job)
+    {
+        dp($job);
+        
+        $result = [
+            'crap' => 0,
+            'unit'  => 0,
+        ];
+        
+        $artifacts = $job->Artifacts;
+        if (empty($artifacts)) {
+            return $result;
         }
         
-         
+        $artifacts = json_decode($artifacts);
+        foreach ($artifacts as $artifactDetails) {
+            
+            $relativePath = $artifactDetails->relativePath;
+            
+            //$url = $this->getArtifactUrl($relativePath, );
+        }
+        
+        
+        
+        dp($artifacts);
+        
+        return $result;
+        
+        
+        
+     
     }
     
-    public function job()
+    
+    
+    protected function getJobUrl($project, $job)
     {
-        $this->project = 'hackaton';
-        $this->jobNr = 6;
+        $projectName = $project->Name;
+        $jobNr = $job->IdJob;
         
-        $url = "/{$this->jobNr}/api/json";
-        $response = $this->call($url);
-        
-        $this->Job->add($response);
-        
-        echo $response;
-        exit;
+        return "{$this->projects[$this->project]['url']}/{$this->jobNr}/api/json";
     }
     
-    public function artifacts()
+    protected function getArtifactUrl($relativePath)
     {
-        $job = $this->job(2);
-        $jobContents = json_decode($job, true);
         
-        dp($jobContents);
-        exit;
-        
-        $userName = $jobContents['actions'][0]['causes'][0]['userId'];
-        $commitId = $jobContents['actions'];
-        
-        
-        $changeSet = $jobContents['changeSet'][0];
-        $artifacts = $jobContents['artifacts'];
-        
-        $user = $jobContents[''];
-        
-        dp($jobContents);
-        
-        
-        //$this->getJobArtifacts('hackaton', );
-    }
-    
-    protected function getJobArtifacts($projectName, $jobContents)
-    {
-        $url = $this->projects[$projectName] . '/' . $jobNumber . '/api/json';
-        $obj = $this->call($url);
-        
-        dp($obj);
     }
     
     protected function call($url, $params = [], $method = 'POST')
