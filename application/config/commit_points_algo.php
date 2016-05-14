@@ -6,7 +6,11 @@ $config['algo'] = [
         'points' => 10
     ],
     'Unit' => [
-        'weight' => 0.5,
+        'weight' => 0.3,
         'points' => 15
+    ],
+    'Build' => [
+        'weigth' => 0.5,
+        'points' => 20
     ]
 ];

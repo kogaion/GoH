@@ -27,6 +27,10 @@ class Jenkins extends CI_Controller
                 continue;
             }
             
+            if (empty($contents['changeSet']['items'])) {
+                continue;
+            }
+            
             // project
             $idProject = $job->IdProject;
             
@@ -100,19 +104,24 @@ class Jenkins extends CI_Controller
         }
     }
     
-    protected function parseArtifacts($job)
+    protected function parseArtifacts($jobCommit)
     {
-        dp($job);
+        dp($jobCommit);
         
         $result = [
             'crap' => 0,
             'unit'  => 0,
         ];
         
-        $artifacts = $job->Artifacts;
+        $artifacts = $jobCommit->Artifacts;
         if (empty($artifacts)) {
             return $result;
         }
+        
+        $idJob = $jobCommit->IdJob;
+        $job = $this->Job->getById($idJob);
+        
+        dp($job);
         
         $artifacts = json_decode($artifacts);
         foreach ($artifacts as $artifactDetails) {

@@ -134,4 +134,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('Job', 'User', 'JobCommit', 'Commit');
+$autoload['model'] = ['Job', 'User', 'JobCommit', 'ProjectModel', 'JenkinsConnector', 'Commit'];
