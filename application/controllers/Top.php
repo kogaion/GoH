@@ -48,8 +48,7 @@ class Top extends CI_Controller
 
     public function test()
     {
-        $this->load->model('topmodel');
-        var_dump($this->topmodel->getProjectsGraph(1,'2016-05-14 12:30:12', '2016-05-14 19:31:15'));
+        var_dump($this->TopModel->getProjectsGraph(1,'2016-05-14 12:30:12', '2016-05-14 19:31:15'));
     }
 
 }
