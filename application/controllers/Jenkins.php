@@ -98,10 +98,10 @@ class Jenkins extends CI_Controller
             
             $idCommit = $this->Commit->add($commit);
             
-            $jobCommit->IdCommit = $idCommit;
+            $jobCommit->IdCommit = 0;$idCommit;
             $this->JobCommit->process($jobCommit);
             
-            //dp("processed {$jobCommit->CommitId}");
+            dp("processed {$jobCommit->CommitId}");
         }
     }
     
@@ -154,15 +154,36 @@ class Jenkins extends CI_Controller
     
     protected function parseCodeCoverage($contents)
     {
-        return 1;
+        $xml = simplexml_load_string($contents);
+        $attrs = $xml->project->metrics->attributes();
+        
+        $keys = [
+            'methods', 'coveredmethods', 
+            'conditionals', 'coveredconditionals', 
+            'statements', 'coveredstatements', 
+            'elements', 'coveredelements'
+        ];
+        $coverage = array_fill_keys($keys, 0);
+        
+        foreach ($attrs as $name => $val) {
+            if (in_array($name, $keys)) {
+                $coverage[$name] = (string) $val; 
+            }
+        }
+        
+        return round(100 * (0
+            + 0.25 * ($coverage['coveredmethods'] / (empty($coverage['methods']) ? 1 : $coverage['methods']))
+            + 0.25 * ($coverage['coveredconditionals'] / (empty($coverage['conditionals']) ? 1 : $coverage['conditionals']))
+            + 0.25 * ($coverage['coveredstatements'] / (empty($coverage['statements']) ? 1 : $coverage['statements']))
+            + 0.25 * ($coverage['coveredelements'] / (empty($coverage['elements']) ? 1 : $coverage['elements']))
+        ));
     }
     
     protected function parseCrap($contents)
     {
-        return 2;
+        $xml = simplexml_load_string($contents);
+        return (float) $xml->stats->crapMethodPercent * 100;
     }
-    
-    
     
     protected function getArtifactUrl($relativePath, $job)
     {

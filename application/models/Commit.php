@@ -6,7 +6,6 @@ class Commit extends CI_Model
     
     public function add($commit)
     {
-        return 0;
         return $this->db->insert(
             $this->table,
             $commit

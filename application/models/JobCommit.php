@@ -61,7 +61,6 @@ class JobCommit extends CI_Model
     
     public function process($jobCommit)
     {
-        return [];
         return $this->db->query("
             update {$this->table}
             set IdCommit = {$this->db->escape($jobCommit->IdCommit)},
