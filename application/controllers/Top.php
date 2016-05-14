@@ -10,7 +10,7 @@ class Top extends CI_Controller
         $this->load->model('topmodel');
 
 
-        $results = $this->topmodel->getTop( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 3);
+        $results = $this->topmodel->getTopUsers( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 3, 'DESC');
 
         $this->data['best'] = [];
         foreach ( $results as $result ) {
@@ -27,7 +27,7 @@ class Top extends CI_Controller
         }
 
 
-        $results = $this->topmodel->getTop( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 3);
+        $results = $this->topmodel->getTopUsers( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 3, 'ASC');
 
         $this->data['worst'] = [];
         foreach ( $results as $result ) {

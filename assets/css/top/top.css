@@ -27,6 +27,8 @@ body {
     color: red;
 }
 
-#rank_table .name {
-
+#rank_table .separator {
+    background-image: linear-gradient(to right, #992121, black);
+    font-size: 0.5em;
 }
+

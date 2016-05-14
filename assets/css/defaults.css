@@ -6,3 +6,12 @@ html, body {
 table td.right, table th.right {
     text-align: right
 }
+
+table td.center, table th.center {
+    text-align: center;
+}
+
+
+table td.right, table th.right {
+    text-align: right;
+}
