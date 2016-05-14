@@ -9,5 +9,11 @@ class Top extends CI_Controller
         
         
     }
+
+    public function test()
+    {
+        $this->load->model('commit');
+        var_dump($this->commit->insert(1,1));
+    }
     
 }
