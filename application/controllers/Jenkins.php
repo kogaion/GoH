@@ -19,30 +19,45 @@ class Jenkins extends CI_Controller
         ]
     ];
     
-    public function notifyJob()
-    {
-        error_log(dp($_REQUEST));
-    }
-    
     public function parseUnprocessedJobs()
     {   
         $lastProcessedJobs = $this->Job->getUnprocessed();
-        //dp($lastProcessedJobs);
         
         foreach ($lastProcessedJobs as $job) {
+            
             $contents = json_decode($job->Contents, true);
             if (empty($contents)) {
                 continue;
             }
             
-            $user = $contents['changeSet']['items'][0]['author']['fullName'];
-            if (false !== ($pos = stripos($user, '/'))) {
-                $user = substr($user, $pos + 1);
+            // project
+            $idProject = $job->IdProject;
+            
+            // user
+            $userName = $contents['changeSet']['items'][0]['author']['absoluteUrl'];
+            if (false !== ($pos = strripos($userName, '/'))) {
+                $userName = substr($userName, $pos + 1);
+            }
+            $user = $this->User->load($userName);
+            if (empty($user->IdUser)) {
+                continue;
             }
             
-            dp($user);
+            $artifacts = json_encode($contents['artifacts']);
             
-            dp($contents);
+            // commit
+            $commitId = $contents['changeSet']['items'][0]['commitId'];
+            $commitTS = $contents['changeSet']['items'][0]['timestamp'];
+            $commitDate = date('Y-m-d H:i:s', $commitTS / 1000);
+            
+            // add the commit job
+            $jobCommit = new stdClass();
+            $jobCommit->IdUser = $user->IdUser;
+            $jobCommit->IdProject = $idProject;
+            $jobCommit->CreateDate = $commitDate;
+            $jobCommit->Artifacts = $artifacts;
+            $jobCommit->CommitId = $commitId;
+            $this->JobCommit->add($jobCommit);
         }
         
          
@@ -50,8 +65,8 @@ class Jenkins extends CI_Controller
     
     public function job()
     {
-        $this->project = 'hacktiny';
-        $this->jobNr = 2;
+        $this->project = 'hackaton';
+        $this->jobNr = 6;
         
         $url = "/{$this->jobNr}/api/json";
         $response = $this->call($url);
