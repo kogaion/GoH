@@ -9,13 +9,17 @@ class EmailNewsletter extends CI_Controller
     }
 
     public function email() {
-        $html     = $this->generateHtml();
+        $html    = $this->generateHtml();
+        $options = [
+            'turn_off_ssl_verification' => true,
+
+        ];
+        if (PROXY) {
+            $options['proxy'] = PROXY;
+        }
         $sendGrid = new \SendGrid(
             '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',
-            [
-                'turn_off_ssl_verification' => true,
-                'proxy' => 'http://proxy.avangate.local:8080'
-            ]
+            $options
 
         );
 
