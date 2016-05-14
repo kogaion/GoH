@@ -29,6 +29,11 @@ class JenkinsBuildProcessor extends CI_Controller
         $localLastProcessBuild = $this->projectModel->getLastBuild($project['IdProject']);
         $jenkinsProjectDetails = $this->getJenkinsProjectDetails($project['JenkinsId']);
         $buildsToBeAdded       = [];
+        
+        if (empty($jenkinsProjectDetails)) {
+            return;
+        }
+        
         foreach ($jenkinsProjectDetails['builds'] as $projectBuilds) {
             if ($projectBuilds['number'] > $localLastProcessBuild) {
                 $buildsToBeAdded[] = $projectBuilds['number'];
