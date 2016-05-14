@@ -1,0 +1,6 @@
+            Name         Description
+trophy1     Div master   
+trophy2     Editor       
+trophy3     HTML Basic   
+trophy4     #1           Highest score 1 week
+trophy5     Quick Fixer  Fix the code within 1 hour from breaking

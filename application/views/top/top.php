@@ -14,30 +14,47 @@
 
     </head>
     <body>
-    <div class="container-fluid">
+    <div class="container">
 
         <table id="rank_table" class="table">
             <tr>
-                <th class="col-md-1">#</th>
-                <th class="col-md-1">Avatar</th>
-                <th class="col-md-1">Name</th>
+                <th class="right">#</th>
+                <th class="">Avatar</th>
+                <th class="">Name</th>
                 <th>Rank</th>
-                <th>Score</th>
+                <th>Experience</th>
                 <th>Progress</th>
             </tr>
 
-            <?php foreach ($people as $key => $person) { ?>
+            <?php foreach ($best as $key => $person) { ?>
                 <tr>
-                    <td><?= $key + 1 ?></td>
+                    <td class="right"><?= $key + 1 ?></td>
                     <td><?= image_asset('gravatars/' . $person['image'], "", array('width' => '100px')) ?></td>
                     <td><span class="name"><?= $person['name'] ?></span></td>
-                    <td><?= $person['rank'] ?></td>
+                    <td><?= image_asset($person['rank_image'], "", ['height' => '39px']) ?> <?= $person['rank'] ?></td>
                     <td><?= $person['score'] ?></td>
                     <td><span class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>"></span> <?= $person['progress'] ?></td>
                 </tr>
             <?php } ?>
 
+            <tr>
+                <td class="separator center" colspan="<?= count($best) + 3 ?>">
+                    <span class="glyphicon glyphicon-certificate"></span>
+                    <span class="glyphicon glyphicon-certificate"></span>
+                    <span class="glyphicon glyphicon-certificate"></span>
+                </td>
+            </tr>
 
+            <?php foreach ($worst as $key => $person) { ?>
+                <tr>
+                    <td class="right"><?= $key + 1 ?></td>
+                    <td><?= image_asset('gravatars/' . $person['image'], "", array('width' => '100px')) ?></td>
+                    <td><span class="name"><?= $person['name'] ?></span></td>
+                    <td><?= image_asset($person['rank_image'], "", ['height' => '39px']) ?> <?= $person['rank'] ?></td>
+                    <td><?= $person['score'] ?></td>
+                    <td><span class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>"></span> <?= $person['progress'] ?></td>
+                </tr>
+            <?php } ?>
 
         </table>
 
