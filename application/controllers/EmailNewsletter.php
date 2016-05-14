@@ -12,8 +12,8 @@ class EmailNewsletter extends CI_Controller
         $html    = $this->generateHtml();
         $this->load->library('email');
 
-        $this->email->from('ionut.codreanu@avangate.com', 'GoH Team');
-        $this->email->to('ionut.codreanu@avangate.com');
+        $this->email->from(NEWSLETTER_EMAIL_FROM, 'GoH Team');
+        $this->email->to(NEWSLETTER_EMAIL_TO);
 
         $this->email->subject('Game Of Codes - Last week news');
         $this->email->message($html);
