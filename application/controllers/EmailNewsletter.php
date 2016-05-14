@@ -9,8 +9,16 @@ class EmailNewsletter extends CI_Controller
     }
 
     public function email() {
-        $html = $this->generateHtml();
-//        $sendGrid = new \SendGrid()
+        $html    = $this->generateHtml();
+        $this->load->library('email');
+
+        $this->email->from('ionut.codreanu@avangate.com', 'GoH Team');
+        $this->email->to('ionut.codreanu@avangate.com');
+
+        $this->email->subject('Game Of Codes - Last week news');
+        $this->email->message($html);
+
+        $this->email->send();
     }
 
     protected function generateHtml()

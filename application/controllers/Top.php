@@ -7,10 +7,12 @@ class Top extends CI_Controller
 
     public function index()
     {
-        $this->load->model('topmodel');
+        //$this->load->model('topmodel');
 
 
-        $results = $this->topmodel->getTopUsers( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 1000, 'DESC');
+        $results = $this->TopModel->getTopUsers( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()) );
+        //dp($results);
+
 
         $this->data['best'] = [];
         foreach ( $results as $result ) {
@@ -27,7 +29,7 @@ class Top extends CI_Controller
         }
 //
 //
-//        $results = $this->topmodel->getTopUsers( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 3, 'ASC');
+//        $results = $this->TopModel->getTopUsers( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 3, 'ASC');
 //
 //        $this->data['worst'] = [];
 //        foreach ( $results as $result ) {
@@ -48,8 +50,7 @@ class Top extends CI_Controller
 
     public function test()
     {
-        $this->load->model('topmodel');
-        var_dump($this->topmodel->getProjectsGraph(1,'2016-05-14 12:30:12', '2016-05-14 19:31:15'));
+        var_dump($this->TopModel->getProjectsGraph(1,'2016-05-14 12:30:12', '2016-05-14 19:31:15'));
     }
 
 }
