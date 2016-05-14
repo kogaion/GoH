@@ -3,17 +3,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Top extends CI_Controller
 {
+    protected $data = array();
+
     public function index()
     {
-        $this->load->view('top/top');
-        
-        
+        $mock = [
+            [
+                'name' => "Liviu Gelea",
+                'image' => "liviu.jpg",
+                'score' => "liviu.jpg",
+                'progress' => "liviu.jpg",
+            ],
+        ];
+
+        $this->data['people'] = $mock;
+
+        $this->load->view('top/top', $this->data);
     }
 
     public function test()
     {
-        $this->load->model('commit');
-        var_dump($this->commit->insert(1,1));
+        $this->load->model('topmodel');
+        var_dump($this->topmodel->getTop('2016-05-14 12:30:12', '2016-05-14 12:31:15', 3));
     }
-    
+
 }
