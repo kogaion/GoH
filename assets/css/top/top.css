@@ -1,6 +1,6 @@
 
 body {
-    background-image: url("../../image/theme/honeycomb2.png"), linear-gradient(to bottom, rgba(31, 27, 69, 0), rgba(13, 13, 37, 0.63)), url("../../image/theme/bg-min.jpg");
+    background-image: url("../../image/theme/honeycomb2.png"), linear-gradient(to bottom, rgba(31, 27, 69, 0), rgba(13, 13, 37, 0.73)), url("../../image/theme/bg-min.jpg");
     background-size: auto auto, 100% auto, 100% auto;
     height: 100%;
 }
