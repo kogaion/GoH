@@ -48,11 +48,11 @@ class JenkinsConnector
     {
         $jobUrl = $this->buildJobUrl($buildId, $IdProject);
 
-        return $this->send($jobUrl);
+        return $this->send($jobUrl . '/api/json');
     }
 
     public function buildJobUrl($buildId, $IdProject)
     {
-        return sprintf('%s/job/%s/%d/api/json', $this->jenkinsBaseUrl, $IdProject, $buildId);
+        return sprintf('%s/job/%s/%d', $this->jenkinsBaseUrl, $IdProject, $buildId);
     }
 }
