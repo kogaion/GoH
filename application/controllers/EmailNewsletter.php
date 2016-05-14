@@ -10,27 +10,15 @@ class EmailNewsletter extends CI_Controller
 
     public function email() {
         $html    = $this->generateHtml();
-        $options = [
-            'turn_off_ssl_verification' => true,
+        $this->load->library('email');
 
-        ];
-        if (PROXY) {
-            $options['proxy'] = PROXY;
-        }
-        $sendGrid = new \SendGrid(
-            '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',
-            $options
+        $this->email->from('ionut.codreanu@avangate.com', 'GoH Team');
+        $this->email->to('ionut.codreanu@avangate.com');
 
-        );
+        $this->email->subject('Game Of Codes - Last week news');
+        $this->email->message($html);
 
-        $email = new \SendGrid\Email();
-
-        $email->addTo('ionut.codreanu@avangate.com')
-            ->setFrom('ionut.codreanu@avangate.com')
-            ->setSubject('Game Of Codes - Last week news')
-            ->setHtml($html);
-
-        $sendGrid->send($email);
+        $this->email->send();
     }
 
     protected function generateHtml()
