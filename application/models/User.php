@@ -2,16 +2,34 @@
 
 class User extends CI_Model
 {
-    public function insert($email, $name, $firstName, $lastName)
+    public function load($name)
+    {
+        $user = $this->getByName($name);
+        if (empty($user)) {
+            $id = $this->insert("{$name}@avangate.com", $name);
+            $user = $this->getUser($id);
+        }
+        
+        return $user;
+    }
+    
+    
+    public function insert($email, $name)
     {
         return
             $this->db->insert('ivvll_user',
-                ['Email' => $email, 'Name' => $name, 'FirstName' => $firstName, 'LastName' => $lastName]);
+                ['Email' => $email, 'Name' => $name]
+            );
     }
 
     public function getUser($idUser)
     {
         return $this->db->where('IdUser', $idUser)->from('ivvll_user')->get()->row_array();
+    }
+    
+    protected function getByName($name)
+    {
+        return $this->db->query("select * from ivvll_user where name = {$this->db->escape($name)}")->row();
     }
 
     public function getAll()
@@ -39,4 +57,6 @@ class User extends CI_Model
         return
             $this->db->update('ivvll_user');
     }
+    
+    
 }
