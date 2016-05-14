@@ -16,24 +16,28 @@
     <body>
     <div class="container-fluid">
 
-        <table class="table table-striped">
+        <table id="rank_table" class="table">
             <tr>
+                <th class="col-md-1">#</th>
+                <th class="col-md-1">Avatar</th>
+                <th class="col-md-1">Name</th>
                 <th>Rank</th>
-                <th>Avatar</th>
-                <th>Name</th>
                 <th>Score</th>
                 <th>Progress</th>
             </tr>
-            <tr>
-                <?php foreach ( $people as $key => $person ) { ?>
-                    <td><?=$key?></td>
-                    <td><?=image_asset('gravatars/' . $person['image'], "", array('width' => '100px'))?></td>
-                    <td><?=$person['name']?></td>
-                    <td><?=$person['score']?></td>
-                    <td><?=$person['progress']?></td>
-                <?php } ?>
 
-            </tr>
+            <?php foreach ($people as $key => $person) { ?>
+                <tr>
+                    <td><?= $key + 1 ?></td>
+                    <td><?= image_asset('gravatars/' . $person['image'], "", array('width' => '100px')) ?></td>
+                    <td><span class="name"><?= $person['name'] ?></span></td>
+                    <td><?= $person['rank'] ?></td>
+                    <td><?= $person['score'] ?></td>
+                    <td><span class="glyphicon glyphicon-chevron-<?= $person['progress_relative'] ?>"></span> <?= $person['progress'] ?></td>
+                </tr>
+            <?php } ?>
+
+
 
         </table>
 
