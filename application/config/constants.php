@@ -96,3 +96,6 @@ defined('JENKINS_BASE_URL')        OR define('JENKINS_BASE_URL', 'http://ionutco
 defined('JENKINS_TOKEN')        OR define('JENKINS_TOKEN', '9d85bcbc5d1eefd9f089d6a11fe2417e');
 defined('BUILD_FAILED') or define('BUILD_FAILED', -1);
 defined('BUILD_SUCCESFUL') or define('BUILD_SUCCESFUL', 1);
+
+defined('IMAGES_PATH') or define('IMAGES_PATH', './application/top-images/');
+defined('WKHTMLTOIMAGE_FILENAME') || define('WKHTMLTOIMAGE_FILENAME', '/usr/local/bin/wkhtmltoimage');

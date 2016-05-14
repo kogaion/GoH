@@ -11,6 +11,7 @@ class Top extends CI_Controller
 
 
         $results = $this->TopModel->getTopUsers( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()) );
+        //dp($results);
         
 
         $this->data['best'] = [];
