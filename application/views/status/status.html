@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>My first chart using FusionCharts Suite XT</title>
+<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+<script type="text/javascript">
+  FusionCharts.ready(function(){
+    var fusioncharts = new FusionCharts({
+    type: 'bulb',
+    renderAt: 'chart-container',
+    id: 'myChart',
+    width: '50',
+    height: '50',
+    dataFormat: 'json',
+    dataSource: {
+        "chart": {
+            //"caption": "Temperature status of deep freezers",
+            "upperlimit": "500",
+            "lowerlimit": "-60",
+            "captionPadding": "30",
+            "showshadow": "0",
+            "showvalue": "1",
+            //"useColorNameAsValue": "1",
+            "placeValuesInside": "1",
+            "valueFontSize": "12",
+            //Tooltext
+            //"plottooltext": "Current Temperature:{br}$value°C",
+            //Theme
+            "theme": "fint"
+
+
+        },
+        "colorrange": {
+            "color": [{
+                "minvalue": "-60",
+                "maxvalue": "-35",
+                "label": "",
+                "code": "#ff0000"
+            }, {
+                "minvalue": "-35",
+                "maxvalue": "-25",
+                "label": "",
+                "code": "#ff9900"
+            }, {
+                "minvalue": "-25",
+                "maxvalue": "-5",
+                "label": "",
+                "code": "#00ff00"
+            }]
+        },
+        "value": "268"
+    }
+    /*,
+    "events": {
+        "rendered": function(evtObj, argObj) {
+            evtObj.sender.chartInterval = setInterval(function() {
+                var num = (Math.floor(Math.random() * 55) * -1) - 5;
+                FusionCharts("myChart").feedData("&value=" + num);
+            }, 10000);
+        },
+        "disposed": function(evt, arg) {
+            clearInterval(evt.sender.chartInterval);
+        }
+    }*/
+}
+);
+    fusioncharts.render();
+});
+</script>
+</head>
+<body>
+  <div id="chart-container">FusionCharts XT will load here!</div>
+</body>
+</html>
