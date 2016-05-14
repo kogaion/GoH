@@ -3,3 +3,6 @@ html, body {
     min-height: 100%;
 }
 
+table td.right, table th.right {
+    text-align: right
+}
