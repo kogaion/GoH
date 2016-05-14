@@ -4,7 +4,7 @@ class EmailNewsletter extends CI_Controller
 {
     protected $data = [];
 
-    public function html() {
+    public function index() {
         echo $this->generateHtml();
     }
 
@@ -32,7 +32,8 @@ class EmailNewsletter extends CI_Controller
 
         $last7DaysProjectEvolution = $this->TopModel->getTopProjects(
             $last7Days->format('Y-m-d 00:00:00'),
-            $today->format('Y-m-d 00:00:00')
+            $today->format('Y-m-d 00:00:00'),
+            10
         );
 
         $data = [
