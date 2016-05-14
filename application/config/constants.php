@@ -91,8 +91,8 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 defined('XML_PATH') or define('XML_PATH', './application/xml');
 
-//defined('JENKINS_BASE_URL')        OR define('JENKINS_BASE_URL', 'http://ionutcod.avangate.local');
-define('JENKINS_BASE_URL', '192.168.99.100:8080');
+defined('JENKINS_BASE_URL')        OR define('JENKINS_BASE_URL', 'http://ionutcod.avangate.local:8080');
+//define('JENKINS_BASE_URL', '192.168.99.100:8080');
 defined('JENKINS_TOKEN')        OR define('JENKINS_TOKEN', '9d85bcbc5d1eefd9f089d6a11fe2417e');
 defined('BUILD_FAILED') or define('BUILD_FAILED', -1);
 defined('BUILD_SUCCESFUL') or define('BUILD_SUCCESFUL', 1);
