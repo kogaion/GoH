@@ -18,6 +18,8 @@ class EmailNewsletter extends CI_Controller
         $this->email->subject('Game Of Codes - Last week news');
         $this->email->message($html);
 
+        $this->email->set_crlf( "\r\n" );
+
         $this->email->send();
 
     }

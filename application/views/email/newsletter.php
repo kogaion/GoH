@@ -1,12 +1,13 @@
 <html>
 <head>
-
+    <meta charset="UTF-8">
 </head>
 <body>
     <style>
         body {
             margin: 0;
-            padding: 0
+            padding: 0;
+            font-family: Arial;
         }
         #table_content {
             font-family: Arial;
