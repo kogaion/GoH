@@ -5,5 +5,5 @@ html, body {
 
 
 body {
-    background-image: url("../img/honeycomb2.png"), linear-gradient(to bottom, #191E43, #08081F);
+    background-image: url("../image/theme/honeycomb2.png"), linear-gradient(to bottom, #191E43, #08081F);
 }

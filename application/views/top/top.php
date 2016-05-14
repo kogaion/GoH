@@ -12,15 +12,15 @@
 
     </head>
     <body>
-    <span class="glyphicon glyphicon-envelope"></span></p>
-    <p>test</p>
+    <div class="container-fluid">
 
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td><?=image_asset('gravatars/liviu.jpg')?></td>
+            </tr>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-
-
-
+        </table>
+    </div>
         <?php echo js_asset('jquery-2.2.3.min.js') . PHP_EOL;?>
         <?php echo js_asset('bootstrap.min.js') . PHP_EOL;?>
         <?php echo js_asset('top/top.js') . PHP_EOL;?>
