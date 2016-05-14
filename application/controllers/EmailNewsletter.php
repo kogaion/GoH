@@ -4,7 +4,7 @@ class EmailNewsletter extends CI_Controller
 {
     protected $data = [];
 
-    public function html() {
+    public function index() {
         echo $this->generateHtml();
     }
 
@@ -12,13 +12,14 @@ class EmailNewsletter extends CI_Controller
         $html    = $this->generateHtml();
         $this->load->library('email');
 
-        $this->email->from('ionut.codreanu@avangate.com', 'GoH Team');
-        $this->email->to('ionut.codreanu@avangate.com');
+        $this->email->from(NEWSLETTER_EMAIL_FROM, 'GoH Team');
+        $this->email->to(NEWSLETTER_EMAIL_TO);
 
         $this->email->subject('Game Of Codes - Last week news');
         $this->email->message($html);
 
         $this->email->send();
+
     }
 
     protected function generateHtml()
@@ -40,14 +41,18 @@ class EmailNewsletter extends CI_Controller
 
         $last7DaysProjectEvolution = $this->TopModel->getTopProjects(
             $last7Days->format('Y-m-d 00:00:00'),
-            $today->format('Y-m-d 00:00:00')
+            $today->format('Y-m-d 00:00:00'),
+            10
         );
 
         $data = [
             'allTime'           => $generalLeaderBoard,
             'userEvolution'     => $last7DaysUserEvolution,
             'projectsEvolution' => $last7DaysProjectEvolution,
+            'base_url'          => base_url('EmailNewsletter'),
+
         ];
+
         return $this->load->view('email/newsletter', $data, true);
     }
 
