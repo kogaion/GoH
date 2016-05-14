@@ -1,6 +1,6 @@
 <?php
 
-class Project extends CI_Model
+class ProjectModel extends CI_Model
 {
     public function insert($name, $description)
     {
