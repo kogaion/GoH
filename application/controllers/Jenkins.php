@@ -60,8 +60,9 @@ class Jenkins extends CI_Controller
             $jobCommit->CommitId = $commitId;
             $jobCommit->IdJob = $job->IdJob;
             
-            $this->JobCommit->add($jobCommit);
+            //dp($jobCommit);
             
+            $this->JobCommit->add($jobCommit);
             $this->Job->process($job);
             
             dp("processed {$job->IdJob}");
@@ -100,20 +101,19 @@ class Jenkins extends CI_Controller
             $jobCommit->IdCommit = $idCommit;
             $this->JobCommit->process($jobCommit);
             
-            dp("processed {$jobCommit->CommitId}");
+            //dp("processed {$jobCommit->CommitId}");
         }
     }
     
     protected function parseArtifacts($jobCommit)
     {
-        dp($jobCommit);
-        
         $result = [
             'crap' => 0,
             'unit'  => 0,
         ];
         
         $artifacts = $jobCommit->Artifacts;
+        
         if (empty($artifacts)) {
             return $result;
         }
@@ -121,46 +121,58 @@ class Jenkins extends CI_Controller
         $idJob = $jobCommit->IdJob;
         $job = $this->Job->getById($idJob);
         
-        dp($job);
+        if (empty($job->JobUrl)) {
+            return $result;
+        }
         
         $artifacts = json_decode($artifacts);
         foreach ($artifacts as $artifactDetails) {
             
-            $relativePath = $artifactDetails->relativePath;
+            if (!in_array($artifactDetails->fileName, ['build-coverege.xml', 'crap.xml'])) {
+                return $result;
+            }
             
-            //$url = $this->getArtifactUrl($relativePath, );
+            $relativePath = $artifactDetails->relativePath;
+            $url = $this->getArtifactUrl($relativePath, $job);
+            
+            $contents = $this->call($url, [], 'GET');
+            if (empty($contents)) {
+                continue;
+            }
+            
+            if ($artifactDetails->fileName == 'build-coverege.xml') {
+                $result['unit'] = $this->parseCodeCoverage($contents);
+            }
+            
+            if ($artifactDetails->fileName == 'crap.xml') {
+                $result['crap'] = $this->parseCrap($contents);
+            }
         }
         
-        
-        
-        dp($artifacts);
-        
         return $result;
-        
-        
-        
-     
+    }
+    
+    protected function parseCodeCoverage($contents)
+    {
+        return 1;
+    }
+    
+    protected function parseCrap($contents)
+    {
+        return 2;
     }
     
     
     
-    protected function getJobUrl($project, $job)
+    protected function getArtifactUrl($relativePath, $job)
     {
-        $projectName = $project->Name;
-        $jobNr = $job->IdJob;
-        
-        return "{$this->projects[$this->project]['url']}/{$this->jobNr}/api/json";
-    }
-    
-    protected function getArtifactUrl($relativePath)
-    {
-        
+        return "{$job->JobUrl}/artifact/{$relativePath}";
     }
     
     protected function call($url, $params = [], $method = 'POST')
     {
         $options = [
-            CURLOPT_URL             => $this->url . $this->projects[$this->project]['url'] . $url,
+            CURLOPT_URL             => $url,
             //CURLOPT_POSTFIELDS    => $params,
             CURLOPT_RETURNTRANSFER  => true,
             CURLOPT_FOLLOWLOCATION  => false,
