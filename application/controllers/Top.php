@@ -7,16 +7,28 @@ class Top extends CI_Controller
 
     public function index()
     {
-        $mock = [
-            [
-                'name' => "Liviu Gelea",
-                'image' => "liviu.jpg",
-                'score' => "liviu.jpg",
-                'progress' => "liviu.jpg",
-            ],
-        ];
+        $this->load->model('topmodel');
 
-        $this->data['people'] = $mock;
+
+        $results = $this->topmodel->getTop( date("Y-m-d H:i:s",  strtotime("-1 week") ) , date("Y-m-d H:i:s", time()), 3);
+
+        //var_dump($results);
+
+        $this->data['people'] = [];
+
+        foreach ( $results as $result ) {
+            $tmp = [];
+            $tmp['name'] = $result['Name'];
+            $tmp['rank'] = $result['Rank'];
+            $tmp['image'] = $result['Name'] . '.jpg';
+            $tmp['score'] = $result['XpPoints'];
+            $tmp['progress'] = $result['points'];
+            $tmp['progress_relative'] = ($result['points'] >= 0) ? "up" : "down";
+
+            $this->data['people'][] = $tmp;
+            $this->data['people'][] = $tmp;
+            $this->data['people'][] = $tmp;
+        }
 
         $this->load->view('top/top', $this->data);
     }
